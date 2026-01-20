@@ -1,0 +1,97 @@
+# Pipeline Configuration
+# Default settings for pose estimation pipeline
+
+# Input settings
+input:
+  supported_formats: [".mp4", ".avi", ".mov", ".mkv", ".webm"]
+  # Maximum video resolution (width)
+  max_width: 1280
+  # Frame sampling rate (1 = every frame, 2 = every 2nd frame, etc.)
+  frame_skip: 1
+
+# Pose estimation settings
+pose_estimation:
+  # Model complexity: 0 (lite), 1 (full), 2 (heavy)
+  model_complexity: 2
+  # Minimum detection confidence (0.0 - 1.0)
+  min_detection_confidence: 0.5
+  # Minimum tracking confidence (0.0 - 1.0)
+  min_tracking_confidence: 0.5
+  # Enable 3D pose estimation (MediaPipe Pose)
+  enable_3d: true
+  # Smooth landmarks across frames
+  smooth_landmarks: true
+
+# Postprocessing settings
+postprocess:
+  # Normalize coordinates to [-1, 1] range
+  normalize: true
+  # Apply temporal smoothing
+  temporal_smoothing: true
+  # Smoothing window size (frames)
+  smoothing_window: 5
+  # Filter low confidence keypoints
+  confidence_threshold: 0.3
+  # Interpolate missing keypoints
+  interpolate_missing: true
+
+# Export settings
+export:
+  # Available formats: json, csv, npz, parquet
+  formats: ["json", "csv"]
+  # Include metadata in export
+  include_metadata: true
+  # Pretty print JSON
+  json_pretty: true
+  # Include confidence scores
+  include_confidence: true
+
+# Visualization settings
+visualization:
+  # Draw skeleton on output video
+  draw_skeleton: true
+  # Skeleton line thickness
+  line_thickness: 2
+  # Keypoint circle radius
+  keypoint_radius: 4
+  # Show confidence values
+  show_confidence: false
+
+# MediaPipe Pose landmark mapping to humanoid joints
+landmark_mapping:
+  # Head
+  nose: 0
+  left_eye_inner: 1
+  left_eye: 2
+  left_eye_outer: 3
+  right_eye_inner: 4
+  right_eye: 5
+  right_eye_outer: 6
+  left_ear: 7
+  right_ear: 8
+  mouth_left: 9
+  mouth_right: 10
+  # Upper body
+  left_shoulder: 11
+  right_shoulder: 12
+  left_elbow: 13
+  right_elbow: 14
+  left_wrist: 15
+  right_wrist: 16
+  left_pinky: 17
+  right_pinky: 18
+  left_index: 19
+  right_index: 20
+  left_thumb: 21
+  right_thumb: 22
+  # Lower body
+  left_hip: 23
+  right_hip: 24
+  left_knee: 25
+  right_knee: 26
+  left_ankle: 27
+  right_ankle: 28
+  left_heel: 29
+  right_heel: 30
+  left_foot_index: 31
+  right_foot_index: 32

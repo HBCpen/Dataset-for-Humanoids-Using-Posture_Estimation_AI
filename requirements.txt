@@ -1,0 +1,25 @@
+# Pose Estimation Pipeline Dependencies
+# Core Libraries
+opencv-python>=4.8.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Pose Estimation
+mediapipe>=0.10.0
+
+# Data Processing
+scipy>=1.10.0
+tqdm>=4.65.0
+
+# Export Formats
+pyarrow>=12.0.0  # For Parquet support
+
+# Web Demo
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Visualization
+matplotlib>=3.7.0
+
+# Configuration
+pyyaml>=6.0
