@@ -120,23 +120,6 @@ python app.py
 5. **出力生成**: フォーマット別に `data/export/` へ書き出し
 6. **品質管理**: 可視化ダッシュボードや統計量で品質評価
 
-## 推奨ディレクトリ構成（初期案）
-```
-├── README.md
-├── data/
-│   ├── raw/
-│   ├── interim/
-│   ├── processed/
-│   └── export/
-├── notebooks/
-├── scripts/
-│   ├── preprocess.py
-│   ├── pose_estimation.py
-│   ├── postprocess.py
-│   └── export.py
-├── configs/
-└── tests/
-```
 
 ## セットアップ手順（ドラフト）
 1. Python 仮想環境を作成: `python -m venv .venv && source .venv/bin/activate`
