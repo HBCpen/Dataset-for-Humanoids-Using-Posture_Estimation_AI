@@ -1,7 +1,103 @@
 # Dataset for Humanoids Using Posture Estimation AI
 
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
+[![MediaPipe](https://img.shields.io/badge/MediaPipe-0.10+-green.svg)](https://mediapipe.dev)
+[![License](https://img.shields.io/badge/License-TBD-gray.svg)](#license)
+
 ## プロジェクト概要
+
 ヒューマノイドロボット向けの動作学習やシミュレーションに活用できるデータセットを、姿勢推定AI（2D/3D）を用いて画像・動画ファイルから自動生成するためのリポジトリです。データクレンジングからアノテーション整形、フォーマット統合までの一連のパイプラインを構築することを目的とします。
+
+## 🚀 クイックスタート
+
+### 1. 環境構築
+
+```bash
+# リポジトリのクローン
+cd /path/to/project
+
+# 仮想環境の作成と有効化
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# .venv\Scripts\activate   # Windows
+
+# 依存パッケージのインストール
+pip install -r requirements.txt
+```
+
+### 2. パイプラインの実行
+
+```bash
+# 単一の動画を処理
+python pipeline.py data/raw/sample_video.mp4
+
+# 単一の画像を処理
+python pipeline.py data/raw/sample_image.jpg
+
+# ディレクトリ内の全ファイルを処理
+python pipeline.py data/raw/ -o data/output/
+
+# カスタム設定ファイルを使用
+python pipeline.py video.mp4 -c configs/custom.yaml
+```
+
+### 3. Webデモの起動
+
+```bash
+cd src
+python app.py
+# ブラウザで http://localhost:5000 にアクセス
+```
+
+## 📁 ディレクトリ構成
+
+```
+├── README.md
+├── requirements.txt          # Python依存パッケージ
+├── pipeline.py               # メインパイプラインスクリプト
+├── configs/
+│   └── default.yaml          # デフォルト設定
+├── data/
+│   ├── raw/                  # 入力動画・画像
+│   ├── interim/              # 前処理済みデータ
+│   ├── processed/            # 姿勢推定結果（JSON）
+│   └── export/               # エクスポート済みデータ
+├── scripts/
+│   ├── preprocess.py         # 動画前処理
+│   ├── pose_estimation.py    # 姿勢推定（MediaPipe）
+│   ├── postprocess.py        # 後処理（平滑化・正規化）
+│   └── export.py             # データエクスポート
+├── src/
+│   ├── app.py                # Webデモサーバー
+│   ├── templates/            # HTMLテンプレート
+│   └── static/               # CSS/JavaScript
+├── notebooks/                # Jupyterノートブック
+└── tests/                    # テストコード
+```
+
+## 🔧 パイプライン詳細
+
+### Stage 1: 前処理 (`preprocess.py`)
+- 動画の解像度正規化（最大幅1280px）
+- フレームレート調整
+- 品質フィルタリング
+
+### Stage 2: 姿勢推定 (`pose_estimation.py`)
+- MediaPipe Poseによる33点の骨格ランドマーク抽出
+- 2D/3D座標の取得
+- 信頼度スコアの記録
+- 骨格オーバーレイ動画の生成
+
+### Stage 3: 後処理 (`postprocess.py`)
+- 時間軸での平滑化（ガウシアンフィルタ）
+- 座標の正規化（hip-center原点）
+- 欠損値の補間
+- 関節角度の計算
+
+### Stage 4: エクスポート (`export.py`)
+- **JSON**: ヒューマノイド向けフォーマット
+- **CSV**: 時系列データ分析用
+- **NPZ**: NumPy高速読み込み用
 
 ## 主な目標
 - 既存の画像・動画アーカイブから人間のポーズ情報を抽出し、骨格データとして保存する。

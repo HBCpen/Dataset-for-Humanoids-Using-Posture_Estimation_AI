@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pose Estimation Pipeline - Demo</title>
+    <meta name="description" content="姿勢推定AIを用いたヒューマノイド向けデータセット生成パイプラインのデモ">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#grad1)" opacity="0.2"/>
+                        <circle cx="12" cy="6" r="2" fill="currentColor"/>
+                        <path d="M12 8v4M12 12l-3 4M12 12l3 4M12 12l-4 2M12 12l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="22">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>Pose Estimation Pipeline</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#upload" class="nav-link active">アップロード</a>
+                    <a href="#about" class="nav-link">概要</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">
+                        映像から<span class="gradient-text">骨格データ</span>を抽出
+                    </h2>
+                    <p class="hero-description">
+                        姿勢推定AIを活用してヒューマノイドロボット向けの動作データセットを自動生成します
+                    </p>
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section id="upload" class="upload-section">
+                <div class="upload-container">
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M7 10l5-5 5 5M12 5v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <p class="upload-text">ファイルをドラッグ＆ドロップ</p>
+                        <p class="upload-subtext">または</p>
+                        <button class="upload-button" id="uploadButton">ファイルを選択</button>
+                        <input type="file" id="fileInput" accept=".mp4,.avi,.mov,.mkv,.webm,.jpg,.jpeg,.png" hidden>
+                        <p class="upload-formats">対応形式: MP4, AVI, MOV, MKV, WebM, JPG, PNG</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section id="progress" class="progress-section" style="display: none;">
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <h3>処理中...</h3>
+                        <span class="progress-filename" id="progressFilename"></span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <p class="progress-status" id="progressStatus">ファイルをアップロード中...</p>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results" class="results-section" style="display: none;">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h3>処理完了</h3>
+                        <button class="reset-button" id="resetButton">新しいファイル</button>
+                    </div>
+                    
+                    <div class="results-grid">
+                        <!-- Stats Card -->
+                        <div class="result-card stats-card">
+                            <h4>統計情報</h4>
+                            <div class="stats-grid" id="statsGrid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Preview Card -->
+                        <div class="result-card preview-card">
+                            <h4>プレビュー</h4>
+                            <div class="preview-container" id="previewContainer">
+                                <!-- Video or image preview -->
+                            </div>
+                        </div>
+
+                        <!-- Download Card -->
+                        <div class="result-card download-card">
+                            <h4>ダウンロード</h4>
+                            <div class="download-links" id="downloadLinks">
+                                <!-- Download links -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="about-section">
+                <div class="about-container">
+                    <h3>パイプラインについて</h3>
+                    <div class="pipeline-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>前処理</h4>
+                            <p>動画の解像度正規化、品質フィルタリング</p>
+                        </div>
+                        <div class="step-arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>姿勢推定</h4>
+                            <p>MediaPipeによる3D骨格抽出</p>
+                        </div>
+                        <div class="step-arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>後処理</h4>
+                            <p>正規化、時間平滑化、関節角度計算</p>
+                        </div>
+                        <div class="step-arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h4>エクスポート</h4>
+                            <p>JSON/CSV/NPZ形式への変換</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Pose Estimation Pipeline for Humanoid Dataset Generation</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
